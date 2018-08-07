@@ -6,9 +6,17 @@
   "dependencies": {
     "typescript": "^2.9.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/chai": "^4.1.4",
+    "@types/mocha": "^5.2.5",
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
+    "ts-node": "^7.0.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -r ts-node/register solutions/**/*.spec.ts",
+    "build": "tsc",
+    "play": "node ./build/playground/playground.js"
   },
   "repository": {
     "type": "git",

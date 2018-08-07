@@ -2,7 +2,7 @@
  * A very simply Observable class
  */
 
-export class Observable<T> {
+export class Observable {
     /** Internal implementation detail */
     private _subscribe: any;
 
@@ -20,15 +20,29 @@ export class Observable<T> {
     }
 
     // public api for registering an observer
-    subscribe(onNext: any, onError?: any, onComplete?: any) {
+    subscribe(onNext: any, onError?: any, onCompleted?: any) {
         if (typeof onNext === 'function') {
             return this._subscribe({
                 onNext: onNext,
                 onError: onError || (() => {}),
-                onComplete: onComplete || (() => {})
+                onCompleted: onCompleted || (() => {})
             });
         } else {
             return this._subscribe(onNext);
         }
+    }
+
+    static of(...args): Observable {
+        return new Observable((obs) => {
+            args.forEach(val => obs.onNext(val));
+            obs.onCompleted();
+        });
+    }
+
+    static just(val): Observable {
+        return new Observable((observer) => {
+            observer.onNext(val);
+            observer.onCompleted();
+        });
     }
  }
