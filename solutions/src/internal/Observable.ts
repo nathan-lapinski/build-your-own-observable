@@ -21,13 +21,14 @@ export class Observable<T> {
 
     // public api for registering an observer
     subscribe(onNext: any, onError?: any, onComplete?: any) {
-        // very simple. We create an "observer" out of the three
-        // methods, and pass it into our internal _subscribe function.
-        const anon = () => {};
-        return this._subscribe({
-            onNext: onNext,
-            onError: onError || anon,
-            onComplete: onComplete || anon
-        });
+        if (typeof onNext === 'function') {
+            return this._subscribe({
+                onNext: onNext,
+                onError: onError || (() => {}),
+                onComplete: onComplete || (() => {})
+            });
+        } else {
+            return this._subscribe(onNext);
+        }
     }
  }
