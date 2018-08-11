@@ -1,6 +1,9 @@
 {
     "compilerOptions": {
-        "outDir": "build/"
+        "outDir": "build/",
+        "target": "es5",
+        "downlevelIteration": true,
+        "lib": ["es6"]
     },
     "include": [
         "solutions/**/*.ts"

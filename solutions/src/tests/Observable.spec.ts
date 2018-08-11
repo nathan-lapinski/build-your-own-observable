@@ -34,4 +34,39 @@ describe('Observable', () => {
     });
   });
 
+  describe('Observable fron', () => {
+    it('should consume an iterable and complete', (done: MochaDone) => {
+      const x = [1, 2, 'three'];
+      const expected = [1, 2, 'three'];
+      let i = 0;
+
+      Observable.from(x)
+        .subscribe((val) => {
+          expect(val).to.equal(expected[i++]);
+        }, (err) => {
+          done(new Error('should not be called'));
+        }, () => {
+          done();
+      });
+    });
+
+    it('should consume any iterable, including one from a generator', (done: MochaDone) => {
+      function* foo(){
+        yield 1;
+        yield 2;
+      };
+
+      const expected = [1,2];
+      let i = 0;
+    
+      Observable.from(foo()).subscribe((x: number) => {
+        expect(x).to.equal(expected[i++]);
+      }, (err: any) => {
+        done(new Error('should not be called'));
+      }, () => {
+        done();
+      });
+    });
+  });
+
 });

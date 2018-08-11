@@ -33,16 +33,41 @@ export class Observable {
     }
 
     static of(...args): Observable {
-        return new Observable((obs) => {
-            args.forEach(val => obs.onNext(val));
-            obs.onCompleted();
+        return new Observable((observer) => {
+            args.forEach(val => observer.onNext(val));
+            observer.onCompleted();
+
+            return {
+                unsubscribe: () => {
+                    // just make sure none of the original subscriber's methods are ever called.
+                    observer = {
+                        onNext: () => {},
+                        onError: () => {},
+                        onCompleted: () => {}
+                    };
+                }
+            };
         });
     }
 
-    static just(val): Observable {
+    static from(iterable): Observable {
         return new Observable((observer) => {
-            observer.onNext(val);
+            for (let item of iterable) {
+                observer.onNext(item);
+            }            
+
             observer.onCompleted();
+
+            return {
+                unsubscribe: () => {
+                    // just make sure none of the original subscriber's methods are ever called.
+                    observer = {
+                        onNext: () => {},
+                        onError: () => {},
+                        onCompleted: () => {}
+                    };
+                }
+            };
         });
     }
  }
