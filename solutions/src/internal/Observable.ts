@@ -70,4 +70,16 @@ export class Observable {
             };
         });
     }
+
+    static fromEvent(source, event): Observable {
+        return new Observable((observer) => {
+            const callbackFn = (e) => observer.onNext(e);
+
+            source.addEventListener(event, callbackFn);
+
+            return {
+                unsubscribe: () => source.removeEventListener(event, callbackFn)
+            };
+        });
+    }
  }
