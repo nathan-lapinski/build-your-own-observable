@@ -12,12 +12,12 @@ describe('Observable', () => {
 
       Observable.of(1, 'a', x)
         .subscribe((val) => {
-            expect(val).to.equal(expected[i++]);
+          expect(val).to.equal(expected[i++]);
         }, (err) => {
-            done(new Error('should not be called'));
+          done(new Error('should not be called'));
         }, () => {
-            done();
-        });
+          done();
+      });
     });
 
     it('should emit one value', (done: MochaDone) => {
