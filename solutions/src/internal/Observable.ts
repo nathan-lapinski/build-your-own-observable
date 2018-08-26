@@ -82,4 +82,52 @@ export class Observable {
             };
         });
     }
- }
+
+    /**
+     * Operators
+     */
+
+     /**
+      * map takes a projection function, and applies it to each value emitted by the input stream, and emits the
+      * result to the output stream.
+      */
+     map(projectionFn): Observable {
+        return new Observable((observer) => {
+            return this.subscribe(
+                (val) => observer.onNext(projectionFn(val)),
+                (e) => observer.onError(e),
+                () => observer.onCompleted()
+            );
+        });
+    }
+
+    filter(predicateFn): Observable {
+        return new Observable((observer) => {
+            return this.subscribe(
+                (val) => {
+                    // only emit the value if it passes the filter function
+                    if (predicateFn(val)) {
+                        observer.onNext(val);
+                    }
+                },
+                (e) => observer.onError(e),
+                () => observer.onCompleted()
+            );
+        });
+    }
+
+    take(count: number): Observable {
+        return new Observable((observer) => {
+            let currentCount = 0;
+            return this.subscribe(
+                (val) => {
+                    if (currentCount++ < count) {
+                        observer.onNext(val);
+                    }
+                },
+                (e) => observer.onError(e),
+                () => observer.onCompleted()
+            );
+        });
+    }
+}
