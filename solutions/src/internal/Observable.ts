@@ -123,6 +123,8 @@ export class Observable {
                 (val) => {
                     if (currentCount++ < count) {
                         observer.onNext(val);
+                    } else {
+                        observer.onCompleted();
                     }
                 },
                 (e) => observer.onError(e),
